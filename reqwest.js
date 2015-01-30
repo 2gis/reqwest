@@ -133,8 +133,14 @@
         if (lastValue.hasOwnProperty(reqId)) {
           delete lastValue[reqId]
         }
-        if (cbval.indexOf(reqwest.getcallbackPrefix()) >= 0 && win.hasOwnProperty(cbval)) {
-          delete win[cbval]
+        // in IE8 window doesn't have hasOwnProperty method
+        if (cbval.indexOf(reqwest.getcallbackPrefix()) >= 0 && Object.prototype.hasOwnProperty.call(win, cbval)) {
+          // IE8 cann't delete any values from window
+          try {
+            delete win[cbval]
+          } catch (e) {
+            win[cbval] = void 0;
+          }
         }
       }
 
